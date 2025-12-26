@@ -16,6 +16,12 @@ Portfolio Evolution:
 v1.0 Docker (done) → v2.0 EC2 + Terraform (current)
 ```
 
+### Demo: Automatic Failover in Action
+
+![PostgreSQL HA Failover Demo](docs/postgres-ha-ec2-demo.gif)
+
+*EC2 instance stopped (hardware failure simulation) → automatic failover → zero data loss → node reintegration*
+
 ### Skills Demonstrated
 
 | Category | Technologies |
@@ -586,6 +592,12 @@ Esta é a **v2.0** do PostgreSQL HA Lab — a evolução cloud-native do [Postgr
 Evolução do Portfólio:
 v1.0 Docker (concluído) → v2.0 EC2 + Terraform (atual)
 ```
+
+### Demo: Failover Automático em Ação
+
+![PostgreSQL HA Failover Demo](docs/postgres-ha-ec2-demo.gif)
+
+*Instância EC2 parada (simulação de falha de hardware) → failover automático → zero perda de dados → reintegração do nó*
 
 ### Skills Demonstradas
 

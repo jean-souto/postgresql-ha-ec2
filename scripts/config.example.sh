@@ -13,6 +13,42 @@
 
 set -e
 
+# =============================================================================
+# Colors for terminal output
+# =============================================================================
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+NC='\033[0m' # No Color
+
+# Logging functions
+log_info() {
+    echo -e "${BLUE}[INFO]${NC} $1"
+}
+
+log_success() {
+    echo -e "${GREEN}[OK]${NC} $1"
+}
+
+log_warn() {
+    echo -e "${YELLOW}[WARN]${NC} $1"
+}
+
+log_error() {
+    echo -e "${RED}[ERROR]${NC} $1"
+}
+
+log_action() {
+    echo -e "${CYAN}[ACTION]${NC} $1"
+}
+
+log_wait() {
+    echo -e "${YELLOW}[WAIT]${NC} $1"
+}
+
 # Paths
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
@@ -25,6 +61,10 @@ TERRAFORM_DIR="$PROJECT_ROOT/terraform"
 # Example Windows: /c/Users/yourname/path/to/your-key.pem
 # Example Linux/Mac: /home/yourname/.ssh/your-key.pem
 SSH_KEY_PATH="/c/Users/YOUR_USERNAME/path/to/your-aws-key.pem"
+
+# AWS CLI profile and region (must match terraform configuration)
+AWS_PROFILE="postgresql-ha-profile"
+AWS_REGION="us-east-1"
 # =============================================================================
 
 # SSH options
@@ -85,4 +125,4 @@ ssh_to_bastion() {
     ssh $SSH_OPTS -i "$SSH_KEY_PATH" "ec2-user@$bastion_ip" "$command"
 }
 
-echo "Config loaded. Project: $PROJECT_ROOT"
+log_info "Config loaded. Project: $PROJECT_ROOT"

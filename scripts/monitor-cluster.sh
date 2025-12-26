@@ -13,11 +13,11 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/config.sh"
 
 echo ""
-echo "========================================"
-echo " PostgreSQL HA Cluster Monitor"
-echo "========================================"
+echo -e "${BOLD}========================================${NC}"
+echo -e "${BOLD} PostgreSQL HA Cluster Monitor${NC}"
+echo -e "${BOLD}========================================${NC}"
 echo ""
-echo "Press Ctrl+C to stop monitoring"
+log_info "Press Ctrl+C to stop monitoring"
 echo ""
 
 # Get infrastructure info
@@ -32,12 +32,12 @@ while true; do
 
     TIMESTAMP=$(date "+%Y-%m-%d %H:%M:%S")
 
-    echo "========================================"
-    echo " PostgreSQL HA Cluster Monitor"
-    echo " $TIMESTAMP"
-    echo "========================================"
+    echo -e "${BOLD}========================================${NC}"
+    echo -e "${BOLD} PostgreSQL HA Cluster Monitor${NC}"
+    echo -e " ${CYAN}$TIMESTAMP${NC}"
+    echo -e "${BOLD}========================================${NC}"
     echo ""
-    echo "NLB: $NLB_DNS"
+    echo -e "NLB: ${CYAN}$NLB_DNS${NC}"
     echo ""
 
     # Try to get status from any responding node
@@ -46,7 +46,7 @@ while true; do
     for ip in "${PATRONI_IPS[@]}"; do
         if status=$(ssh_via_bastion "$ip" "sudo patronictl -c /etc/patroni/patroni.yml list 2>/dev/null"); then
             if [[ -n "$status" ]] && [[ "$status" != *"not ready"* ]]; then
-                echo "--- Patroni Cluster ---"
+                echo -e "${CYAN}--- Patroni Cluster ---${NC}"
                 echo "$status"
                 GOT_STATUS=true
                 break
@@ -55,30 +55,30 @@ while true; do
     done
 
     if [[ "$GOT_STATUS" == "false" ]]; then
-        echo "[WARN] Could not get cluster status. Cluster may be bootstrapping..."
+        log_warn "Could not get cluster status. Cluster may be bootstrapping..."
     fi
 
     echo ""
-    echo "--- Connection Test (via bastion) ---"
+    echo -e "${CYAN}--- Connection Test (via bastion) ---${NC}"
 
     # Test NLB connection via bastion
     test_5432=$(ssh_to_bastion "timeout 2 bash -c '</dev/tcp/$NLB_DNS/5432' 2>/dev/null && echo 'OK' || echo 'FAIL'")
     if [[ "$test_5432" == *"OK"* ]]; then
-        echo "[OK] NLB :5432 reachable"
+        echo -e "${GREEN}[OK]${NC} NLB :5432 reachable"
     else
-        echo "[--] NLB :5432 not reachable"
+        echo -e "${RED}[--]${NC} NLB :5432 not reachable"
     fi
 
     # Test read-only port via bastion
     test_5433=$(ssh_to_bastion "timeout 2 bash -c '</dev/tcp/$NLB_DNS/5433' 2>/dev/null && echo 'OK' || echo 'FAIL'")
     if [[ "$test_5433" == *"OK"* ]]; then
-        echo "[OK] NLB :5433 (read-only) reachable"
+        echo -e "${GREEN}[OK]${NC} NLB :5433 (read-only) reachable"
     else
-        echo "[--] NLB :5433 (read-only) not reachable"
+        echo -e "${RED}[--]${NC} NLB :5433 (read-only) not reachable"
     fi
 
     echo ""
-    echo "Refreshing in $REFRESH_INTERVAL seconds... (Ctrl+C to stop)"
+    echo -e "${YELLOW}Refreshing in $REFRESH_INTERVAL seconds... (Ctrl+C to stop)${NC}"
 
     sleep $REFRESH_INTERVAL
 done
