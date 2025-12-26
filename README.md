@@ -20,7 +20,7 @@ v1.0 Docker (done) → v2.0 EC2 + Terraform (current)
 
 ![PostgreSQL HA Failover Demo](docs/postgres-ha-ec2-demo.gif)
 
-*EC2 instance stopped (hardware failure simulation) → automatic failover → zero data loss → node reintegration*
+*Chaos testing: Patroni stop (graceful) → PostgreSQL kill (crash) → Patroni failover (planned) → EC2 stop (hardware failure) — all with automatic recovery and zero data loss*
 
 ### Skills Demonstrated
 
@@ -319,6 +319,9 @@ postgresql-ha-ec2/
 │   ├── verify-data.sh       # Data integrity check
 │   └── monitor-cluster.sh   # Real-time monitoring
 │
+├── docs/
+│   └── postgres-ha-ec2-demo.gif  # Chaos testing demo
+│
 ├── CHANGELOG.md             # Version history (EN/PT-BR)
 └── README.md                # This file (EN/PT-BR)
 ```
@@ -597,7 +600,7 @@ v1.0 Docker (concluído) → v2.0 EC2 + Terraform (atual)
 
 ![PostgreSQL HA Failover Demo](docs/postgres-ha-ec2-demo.gif)
 
-*Instância EC2 parada (simulação de falha de hardware) → failover automático → zero perda de dados → reintegração do nó*
+*Chaos testing: Patroni stop (graceful) → PostgreSQL kill (crash) → Patroni failover (planejado) → EC2 stop (falha de hardware) — todos com recuperação automática e zero perda de dados*
 
 ### Skills Demonstradas
 
@@ -895,6 +898,9 @@ postgresql-ha-ec2/
 │   ├── insert-loop.sh       # Teste de insert contínuo
 │   ├── verify-data.sh       # Verificação de integridade
 │   └── monitor-cluster.sh   # Monitoramento em tempo real
+│
+├── docs/
+│   └── postgres-ha-ec2-demo.gif  # Demo do chaos testing
 │
 ├── CHANGELOG.md             # Histórico de versões (EN/PT-BR)
 └── README.md                # Este arquivo (EN/PT-BR)
