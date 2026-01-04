@@ -5,7 +5,6 @@
 ![etcd](https://img.shields.io/badge/etcd-3.5.17-blue)
 ![Terraform](https://img.shields.io/badge/Terraform-1.6+-7B42BC?logo=terraform&logoColor=white)
 ![AWS](https://img.shields.io/badge/AWS-EC2%20|%20NLB%20|%20SSM-FF9900?logo=amazonaws&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-yellow)
 
 High-availability PostgreSQL cluster on AWS EC2 using Patroni, etcd, and PgBouncer. Fully managed with Terraform.
 
