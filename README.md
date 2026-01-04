@@ -39,34 +39,37 @@ Portfolio Evolution: v1.0 Docker (done) → v2.0 EC2 + Terraform (current)
 
 ```mermaid
 graph TD
-    User((User)) -->|TCP 5432/5433| NLB[AWS NLB]
-    Admin((Admin)) -->|SSH:22| Bastion[Bastion Host]
+    Admin((Admin/User)) -->|SSH:22| Bastion[Bastion Host]
+    Bastion -->|SSH Tunnel| NLB
 
     subgraph AWS_VPC ["AWS VPC (us-east-1)"]
         subgraph Public_Subnet ["Public Subnet"]
             Bastion
-            NLB
+            NLB[AWS NLB<br/>internal]
 
-            subgraph Data_Layer ["Data Layer"]
-                PG1[(PG 1 - Primary)]
-                PG2[(PG 2 - Replica)]
-                PG3[(PG 3 - Replica)]
-                ETCD1[etcd 1]
-                ETCD2[etcd 2]
-                ETCD3[etcd 3]
-            end
+            PG1[(PG 1)]
+            PG2[(PG 2)]
+            PG3[(PG 3)]
+
+            ETCD1[etcd 1]
+            ETCD2[etcd 2]
+            ETCD3[etcd 3]
         end
     end
 
-    NLB --> PG1
-    NLB --> PG2
-    NLB --> PG3
-    PG1 <--> ETCD1
-    PG1 <-->|Streaming Rep| PG2
-    PG1 <-->|Streaming Rep| PG3
+    NLB -->|:5432 R/W| PG1
+    NLB -->|:5433 R/O| PG2
+    NLB -->|:5433 R/O| PG3
+
+    PG1 -->|Streaming Rep| PG2
+    PG1 -->|Streaming Rep| PG3
+
+    PG1 & PG2 & PG3 <--> ETCD1 & ETCD2 & ETCD3
 
     style NLB fill:#ff9900,stroke:#232f3e,color:white
     style PG1 fill:#336791,stroke:#fff,color:white
+    style PG2 fill:#336791,stroke:#fff,color:white
+    style PG3 fill:#336791,stroke:#fff,color:white
     style Bastion fill:#e7157b,stroke:#fff,color:white
 ```
 
@@ -188,34 +191,37 @@ Evolução do Portfólio: v1.0 Docker (concluído) → v2.0 EC2 + Terraform (atu
 
 ```mermaid
 graph TD
-    User((Usuário)) -->|TCP 5432/5433| NLB[AWS NLB]
-    Admin((Admin)) -->|SSH:22| Bastion[Bastion Host]
+    Admin((Admin/User)) -->|SSH:22| Bastion[Bastion Host]
+    Bastion -->|SSH Tunnel| NLB
 
     subgraph AWS_VPC ["AWS VPC (us-east-1)"]
         subgraph Public_Subnet ["Public Subnet"]
             Bastion
-            NLB
+            NLB[AWS NLB<br/>internal]
 
-            subgraph Data_Layer ["Camada de Dados"]
-                PG1[(PG 1 - Primary)]
-                PG2[(PG 2 - Replica)]
-                PG3[(PG 3 - Replica)]
-                ETCD1[etcd 1]
-                ETCD2[etcd 2]
-                ETCD3[etcd 3]
-            end
+            PG1[(PG 1)]
+            PG2[(PG 2)]
+            PG3[(PG 3)]
+
+            ETCD1[etcd 1]
+            ETCD2[etcd 2]
+            ETCD3[etcd 3]
         end
     end
 
-    NLB --> PG1
-    NLB --> PG2
-    NLB --> PG3
-    PG1 <--> ETCD1
-    PG1 <-->|Streaming Rep| PG2
-    PG1 <-->|Streaming Rep| PG3
+    NLB -->|:5432 R/W| PG1
+    NLB -->|:5433 R/O| PG2
+    NLB -->|:5433 R/O| PG3
+
+    PG1 -->|Streaming Rep| PG2
+    PG1 -->|Streaming Rep| PG3
+
+    PG1 & PG2 & PG3 <--> ETCD1 & ETCD2 & ETCD3
 
     style NLB fill:#ff9900,stroke:#232f3e,color:white
     style PG1 fill:#336791,stroke:#fff,color:white
+    style PG2 fill:#336791,stroke:#fff,color:white
+    style PG3 fill:#336791,stroke:#fff,color:white
     style Bastion fill:#e7157b,stroke:#fff,color:white
 ```
 
